@@ -10,7 +10,8 @@ import Forcast from './Components/Forcast';
 import { getFormatedWeatherData, getWeatherData } from './services/weatherService';
 import {DateTime} from 'luxon'
 import { useEffect, useState } from 'react';
-
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 let date = DateTime.now().setZone("America/New_York").minus({ weeks: 1 }).endOf("day").toISO();
 
 
@@ -27,12 +28,15 @@ console.log(value)
  console.log(weather, 'weather')
 
   useEffect(() => {
-    async function fetchWeatherData (){
-     
-     await getFormatedWeatherData({...query, units})
-    
-      .then((data:object)=> setWeather(data))
-        
+    async function fetchWeatherData (){ 
+      const message = query.q ? query.q : 'current location.'
+      toast.info('fetching weather for '+ message)    
+     await getFormatedWeatherData({...query, units})    
+      .then((data:object)=> {
+        // @ts-ignore
+        toast.success (`successfully fetched weather for ${data.name}`)
+        setWeather(data)
+      })        
     } 
     fetchWeatherData()
   }, [query, units]) 
@@ -42,8 +46,33 @@ console.log(value)
     setValue('')
   }
 
+  const handleLocationOnClick =()=>{
+    if(navigator.geolocation){
+      navigator.geolocation.getCurrentPosition((position)=>{
+        let lat = position.coords.latitude;
+        let lon = position.coords.longitude;
+        // @ts-ignore
+        setquery({lat, lon})
+      })
+    }
+  }
+
+const handleUnitChange = (e:any)=>{
+  let selectedInit = e.currentTarget.name
+  if(units !== selectedInit) setUnits(selectedInit)
+}
+
+const formatBackground = ()=>{
+  if(!weather) return 'from-cyan-700 to-blue-700';
+  const threshold = units === 'metrics' ? 20 : 60;
+  if(weather.temp <=threshold) return 'from-cyan-700 to-blue-700';
+
+  return 'from-yellow-700 to-orange-700'
+
+}
+
   return (
-    <div className="App-container">
+    <div className={`App-container ${formatBackground()}`}>
       <div className='button-wrapper'>
         {city.map((data)=> <Button onclick={()=>setquery({q:data.title})} key={data.id} title={data.title}/>)}
       </div>
@@ -51,15 +80,16 @@ console.log(value)
         <div className='flex items-center gap-4 '>
           <Input value={value} onchange={(e:any)=> setValue(e.target.value.toLowerCase())}/>
           <FiSearch className='cursor-pointer text-[25px] transition ease-out hover:scale-125' onClick={handleClick}/>
-          <FiMapPin className='cursor-pointer text-[25px] transition ease-out hover:scale-125' width='100'/>
+          <FiMapPin className='cursor-pointer text-[25px] transition ease-out hover:scale-125' width='100' onClick={handleLocationOnClick}/>
         </div>
           <div className='flex'>
             <button
             name='metric'
             className='text-xl text-white font-light hover:scale-125 transision ease-out'
+            onClick={handleUnitChange}
             >°C</button>
             <p className='text-xl text-white mx-1'>|</p>
-            <button name='imperal' className='text-xl text-white font-light hover:scale-125 trasition ease-out'>°F</button>
+            <button name='imperal' className='text-xl text-white font-light hover:scale-125 trasition ease-out' onClick={handleUnitChange}>°F</button>
           </div>
       </div>
     {
@@ -72,6 +102,8 @@ console.log(value)
         </div>
       )
     }
+
+<ToastContainer autoClose={5000} theme='colored' newestOnTop={true}/>
     </div>
   )
 }

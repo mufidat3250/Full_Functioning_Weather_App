@@ -2,7 +2,7 @@ import { Zone } from 'luxon'
 import React from 'react'
 import { formatTolocalTime, iconUrlFromCode } from '../../services/weatherService'
 
-const TemperatureAndDetail = ({weather:{temp, icon, feels_like, humidity, wind, sunrise, sunset, timezone, temp_max, temp_min, speed}}:{weather:{temp:number, icon:string, feels_like:number, humidity:number, wind:number, sunrise:number, sunset:number, timezone:string, temp_max:number, temp_min:number, speed:number}}) => {
+const TemperatureAndDetail = ({weather:{temp, icon, feels_like, humidity,  sunrise, sunset, timezone, temp_max, temp_min, speed}}:{weather:{temp:number, icon:string, feels_like:number, humidity:number, wind:number, sunrise:number, sunset:number, timezone:string, temp_max:number, temp_min:number, speed:number}}) => {
     console.log(icon)
   return (
     <div>
@@ -11,7 +11,7 @@ const TemperatureAndDetail = ({weather:{temp, icon, feels_like, humidity, wind, 
         </div>
         <div className='flex flex-row items-center justify-between text-white py-3'>
             <img src={iconUrlFromCode(icon)} alt="" className='w-20' />
-            <p className='text-5xl'>{temp.toFixed()}</p>
+            <p className='text-5xl'>{temp.toFixed()}°</p>
             <div className='flex flex-col space-y-2'>
                 <div className='flex font-light text-sm items-center justify-center'>
                     Real fell:
