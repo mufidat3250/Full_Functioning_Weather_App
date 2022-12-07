@@ -2,7 +2,7 @@ import { Zone } from 'luxon'
 import React from 'react'
 import { formatTolocalTime, iconUrlFromCode } from '../../services/weatherService'
 
-const TemperatureAndDetail = ({weather:{temp, icon, feels_like, humidity, wind, sunrise, sunset, timezone, temp_max, temp_min}}:{weather:{temp:number, icon:string, feels_like:number, humidity:number, wind:number, sunrise:number, sunset:number, timezone:string, temp_max:number, temp_min:number}}) => {
+const TemperatureAndDetail = ({weather:{temp, icon, feels_like, humidity, wind, sunrise, sunset, timezone, temp_max, temp_min, speed}}:{weather:{temp:number, icon:string, feels_like:number, humidity:number, wind:number, sunrise:number, sunset:number, timezone:string, temp_max:number, temp_min:number, speed:number}}) => {
     console.log(icon)
   return (
     <div>
@@ -23,7 +23,7 @@ const TemperatureAndDetail = ({weather:{temp, icon, feels_like, humidity, wind, 
                 </div>
                 <div className='flex font-light text-sm items-center justify-center'>
                     Wind:
-                    {/* <span className='font-medium ml-1'>{wind.toFixed()}km/h</span> */}
+                    <span className='font-medium ml-1'>{speed.toFixed()}km/h</span>
                 </div>
             </div>
         </div>

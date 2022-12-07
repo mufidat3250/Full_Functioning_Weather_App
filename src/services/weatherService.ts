@@ -24,6 +24,7 @@ const formatCurrentWeather = (data: {
     temp_min: number;
     temp_max: number;
     feels_like: number;
+    
   };
   name: string;
   sys: { country: string; sunrise: string; sunset: string };
@@ -41,6 +42,7 @@ const formatCurrentWeather = (data: {
     dt,
   } = data;
 
+  console.log(data, 'raw data')
   const { main, icon, description } = weather[0];
 
   return {
@@ -76,7 +78,7 @@ const formatForcastWeather =(data:any)=>{
   hourly = hourly.slice(1,6).map((d:any)=>{
     return {
       title:formatTolocalTime(d.dt, timezone, 'hh:mm a'),
-      temp:d.temp.day,
+      temp:d.temp,
       icon:d.weather[0].icon
     }
   })
@@ -87,13 +89,13 @@ export const getFormatedWeatherData = async (searchParams:any) => {
     "weather",
     searchParams
   ).then(formatCurrentWeather);
-
   const { lon, lat } = formatedWeatherData;
 
  const  formattedForcastWeather = await getWeatherData('onecall', {
   lon,lat, exlude:'current,munitely,alarts', units:searchParams.units
- }) 
+ }).then(formatForcastWeather) 
   
+ console.log(formattedForcastWeather, 'formattedForcastWeather')
   return {...formatedWeatherData, ...formattedForcastWeather};
 };
 

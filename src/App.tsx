@@ -19,19 +19,28 @@ function App() {
 
 const [query, setquery] = useState({q:'Nigeria'})
 const [units, setUnits] = useState('metric');
-const [weather, setWeather] = useState(null)
+const [weather, setWeather] = useState<any>(null)
+const [value, setValue] = useState('')
+console.log(value)
 
  console.log(query)
- 
+ console.log(weather, 'weather')
+
   useEffect(() => {
     async function fetchWeatherData (){
-      const data = await getFormatedWeatherData({...query, units})
-      console.log(data, 'data')
-        setWeather(data)
+     
+     await getFormatedWeatherData({...query, units})
+    
+      .then((data:object)=> setWeather(data))
+        
     } 
     fetchWeatherData()
-  }, [query, units])
-  console.log(weather)
+  }, [query, units]) 
+
+  const handleClick =()=>{
+    if(value !== '') setquery({q:value})
+    setValue('')
+  }
 
   return (
     <div className="App-container">
@@ -40,32 +49,30 @@ const [weather, setWeather] = useState(null)
       </div>
       <div className='py-5 flex items-center  justify-between'>
         <div className='flex items-center gap-4 '>
-          <Input/>
-          <FiSearch className='cursor-pointer text-[25px] transition ease-out hover:scale-125'/>
+          <Input value={value} onchange={(e:any)=> setValue(e.target.value.toLowerCase())}/>
+          <FiSearch className='cursor-pointer text-[25px] transition ease-out hover:scale-125' onClick={handleClick}/>
           <FiMapPin className='cursor-pointer text-[25px] transition ease-out hover:scale-125' width='100'/>
         </div>
           <div className='flex'>
             <button
             name='metric'
-            className='text-xl text-white font-light'
+            className='text-xl text-white font-light hover:scale-125 transision ease-out'
             >°C</button>
             <p className='text-xl text-white mx-1'>|</p>
-            <button name='imperal' className='text-xl text-white font-light'>°F</button>
+            <button name='imperal' className='text-xl text-white font-light hover:scale-125 trasition ease-out'>°F</button>
           </div>
       </div>
     {
       weather && (
         <div>
       <TimeAndLocation weather={weather}/>
-      <TemperatureAndDetail weather={weather}/>
-      <Forcast title='hourly forcast' />
-      <Forcast title='Daily Forcast'/>
+      <TemperatureAndDetail weather={weather}/>      
+      <Forcast name='hourly forcast' weather={weather.hourly} />
+      <Forcast name='Daily Forcast' weather = {weather.daily}/>
         </div>
       )
     }
-      {date}
     </div>
   )
 }
-
 export default App

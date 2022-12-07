@@ -1,52 +1,36 @@
 import React from 'react'
 
-const Forcast = ({title}:{title:string}) => {
+const Forcast = ({name, weather}:{name:string, weather:Array<{title:string, icon:string, temp:number}>}) => {
+  const heading =  weather.map((data)=> data)
+  console.log(heading)
   return (
     <div>
         <div className='flex items-center justify-center my-6'>
             <p className='text-white font-medium uppercase'>
-               {title}
+               {name}
             </p>
         </div>
         <hr  className='my-2'/>
         <div className=' flex flex-row items-center justify-between text-white '>
-            <div className='flex flex-col  items-center justify-center'>
-            
-            <p className='font-light text-sm'>04:30 PM</p>
-            <img src="http://openweathermap.org/img/wn/01d@2x.png" alt="" className='w-12 my-1'  />
-            <p className='text-white'>22*</p>
-
-            </div>
-            <div className='flex flex-col  items-center justify-center'>
-            
-            <p className='font-light text-sm'>04:30 PM</p>
-            <img src="http://openweathermap.org/img/wn/01d@2x.png" alt="" className='w-12 my-1'  />
-            <p className='text-white'>22*</p>
-
-            </div>
-            <div className='flex flex-col  items-center justify-center'>
-            
-            <p className='font-light text-sm'>04:30 PM</p>
-            <img src="http://openweathermap.org/img/wn/01d@2x.png" alt="" className='w-12 my-1'  />
-            <p className='text-white'>22*</p>
-
-            </div>
-            <div className='flex flex-col  items-center justify-center'>
-            
-            <p className='font-light text-sm'>04:30 PM</p>
-            <img src="http://openweathermap.org/img/wn/01d@2x.png" alt="" className='w-12 my-1'  />
-            <p className='text-white'>22*</p>
-
-            </div>
-            <div className='flex flex-col  items-center justify-center'>
-            
-            <p className='font-light text-sm'>04:30 PM</p>
-            <img src="http://openweathermap.org/img/wn/01d@2x.png" alt="" className='w-12 my-1'  />
-            <p className='text-white'>22*</p>
-            </div>
+         
+      {
+        weather.map(({title, icon, temp})=> {
+          console.log(typeof temp)
+          return <div className='flex flex-col  items-center justify-center'>            
+          <p className='font-light text-sm'>{title}</p>
+          <img src={`http://openweathermap.org/img/wn/${icon}@2x.png`} alt="" className='w-12 my-1'  />
+          <p className='text-white'>{temp ? temp.toFixed() : 30}°</p>  
         </div>
+        })
+      }
+  
+
+  </div>
     </div>
   )
 }
 
 export default Forcast
+
+  
+   
