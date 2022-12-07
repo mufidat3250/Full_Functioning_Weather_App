@@ -1,8 +1,8 @@
-import React from 'react'
+import React, { ReactNode } from 'react'
 
-const Button = ({title}:{title:string}) => {
+const Button = ({title, onclick}:{title:string, onclick:()=>void}) => {
   return (
-        <button className='text-white text-lg font-medium border-none outline-none'>{title}</button>
+        <button className='text-white text-lg font-medium border-none outline-none' onClick={onclick}>{title}</button>
   )
 }
 
